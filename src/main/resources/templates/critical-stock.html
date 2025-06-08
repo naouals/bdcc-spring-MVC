@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout1">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Critique</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 bg-warning">
+                <h5 class="m-0 font-weight-bold text-white">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Stock Critique
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning mb-4">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    Produits avec quantité inférieure à 5 unités
+                </div>
+
+                <!-- Utilisez le même tableau que products.html -->
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Quantité</th>
+                            <th sec:authorize="hasRole('ADMIN')">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p:${productList}"
+                            th:class="${critical != null && critical == true} ? '' : (${p.quantity} < 5 ? 'table-warning' : '')">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${p.name}"></td>
+                            <td th:text="${#numbers.formatCurrency(p.price)}"></td>
+                            <td>
+                                    <span th:text="${p.quantity}"
+                                          th:class="${p.quantity} < 5 ? 'badge bg-danger' : ''"></span>
+                            </td>
+                            <td sec:authorize="hasRole('ADMIN')">
+                                <a th:href="@{/admin/editProduct(id=${p.id})}"
+                                   class="btn btn-sm btn-primary me-1">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <form method="post" th:action="@{/admin/delete}" style="display: inline;">
+                                    <input type="hidden" name="id" th:value="${p.id}">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Confirmer la suppression ?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

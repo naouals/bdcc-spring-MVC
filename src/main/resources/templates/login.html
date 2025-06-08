@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Connexion | Gestion Produits</title>
+    <link href="/webjars/bootstrap/5.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --secondary-color: #f8f9fc;
+        }
+        .login-container {
+            background-color: #ffff;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .login-card {
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: none;
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+        }
+        .login-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .login-body {
+            padding: 2rem;
+            background-color: white;
+        }
+        .form-control {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+        }
+        .btn-login {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 500;
+            width: 100%;
+        }
+        .btn-login:hover {
+            background-color: #3a5bd9;
+        }
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-group input {
+            padding-left: 45px;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="login-card mx-auto">
+                    <div class="login-header">
+                        <h4><i class="bi bi-shield-lock me-2"></i>CONNEXION</h4>
+                    </div>
+                    <div class="login-body">
+                        <form method="post" th:action="@{/login}">
+                            <div class="mb-4">
+                                <label class="form-label text-muted mb-2">Nom d'utilisateur</label>
+                                <div class="input-group">
+                                    <i class="bi bi-person input-icon"></i>
+                                    <input type="text" class="form-control" name="username" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label text-muted mb-2">Mot de passe</label>
+                                <div class="input-group">
+                                    <i class="bi bi-lock input-icon"></i>
+                                    <input type="password" class="form-control" name="password" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember-me">
+                                <label class="form-check-label text-muted" for="remember">Se souvenir de moi</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-login text-white mb-3">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+                            </button>
+
+                            <div th:if="${param.error}" class="alert alert-danger mt-3">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                Identifiants incorrects
+                            </div>
+                        </form>
+                        <div class="card-footer text-center py-2">
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle-fill me-0"></i>
+                                Système de gestion des produits © 2025
+                            </small>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

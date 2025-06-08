@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="layout1">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestion des Produits</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="container-fluid">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="m-0 font-weight-bold text-primary">
+          <i class="bi bi-grid me-2"></i>Liste des Produits
+        </h5>
+        <div>
+          <form class="d-flex" th:action="@{/user/index}" method="get">
+            <div class="input-group">
+              <input type="text"
+                     class="form-control"
+                     name="keyword"
+                     th:value="${keyword}"
+                     placeholder="Rechercher...">
+              <input type="hidden" name="size" th:value="${size}">
+              <button class="btn btn-primary" type="submit">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+        <div sec:authorize="hasRole('ADMIN')">
+          <a class="btn btn-success" th:href="@{/admin/newProduct}">
+            <i class="bi bi-plus-circle me-1"></i> Nouveau
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Prix</th>
+              <th>Quantité</th>
+              <th sec:authorize="hasRole('ADMIN')">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p:${productList}"
+                th:class="${critical != null && critical == true} ? '' : (${p.quantity} < 5 ? 'table-warning' : '')">
+              <td th:text="${p.id}"></td>
+              <td th:text="${p.name}"></td>
+              <td th:text="${#numbers.formatCurrency(p.price)}"></td>
+              <td>
+                                    <span th:text="${p.quantity}"
+                                          th:class="${p.quantity} < 5 ? 'badge bg-danger' : ''"></span>
+              </td>
+              <td sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/editProduct(id=${p.id})}"
+                   class="btn btn-sm btn-primary me-1">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <form method="post" th:action="@{/admin/delete}" style="display: inline;">
+                  <input type="hidden" name="id" th:value="${p.id}">
+                  <button type="submit"
+                          class="btn btn-sm btn-danger"
+                          onclick="return confirm('Confirmer la suppression ?')">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav th:if="${#arrays.length(pages) > 1}" aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+              <a class="page-link"
+                 th:href="@{/user/index(page=${currentPage-1}, size=${size}, keyword=${keyword})}">
+                Précédent
+              </a>
+            </li>
+            <li th:each="i: ${pages}"
+                class="page-item"
+                th:classappend="${currentPage==i} ? 'active'">
+              <a class="page-link"
+                 th:href="@{/user/index(page=${i}, size=${size}, keyword=${keyword})}"
+                 th:text="${i+1}"></a>
+            </li>
+            <li class="page-item"
+                th:classappend="${currentPage == #arrays.length(pages)-1} ? 'disabled'">
+              <a class="page-link"
+                 th:href="@{/user/index(page=${currentPage+1}, size=${size}, keyword=${keyword})}">
+                Suivant
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<footer></footer>
+</body>
+</html>

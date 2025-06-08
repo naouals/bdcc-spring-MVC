@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout1">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${product.id} ? 'Modifier Produit' : 'Nouveau Produit'"></title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="container-fluid">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h5 class="m-0 font-weight-bold text-primary">
+          <i class="bi bi-box-seam me-2"></i>
+          <span th:text="${product.id} ? 'Modifier Produit' : 'Nouveau Produit'"></span>
+        </h5>
+      </div>
+      <div class="card-body">
+        <form method="post" th:action="${product.id} ? @{/admin/updateProduct} : @{/admin/saveProduct}">
+          <input type="hidden" name="id" th:value="${product.id}">
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Nom du produit</label>
+              <input type="text"
+                     class="form-control"
+                     name="name"
+                     th:value="${product.name}"
+                     required>
+              <div class="text-danger" th:errors="${product.name}"></div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Prix (€)</label>
+              <input type="number"
+                     class="form-control"
+                     name="price"
+                     th:value="${product.price}"
+                     step="0.01"
+                     min="0"
+                     required>
+              <div class="text-danger" th:errors="${product.price}"></div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Quantité</label>
+              <input type="number"
+                     class="form-control"
+                     name="quantity"
+                     th:value="${product.quantity}"
+                     min="0"
+                     required>
+              <div class="text-danger" th:errors="${product.quantity}"></div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <a th:href="@{/user/index}" class="btn btn-secondary me-2">
+              <i class="bi bi-x-circle me-1"></i> Annuler
+            </a>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-save me-1"></i>
+              <span th:text="${product.id} ? 'Mettre à jour' : 'Enregistrer'"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
