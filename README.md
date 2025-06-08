@@ -269,8 +269,3 @@ public class ProductController {
 
 
 ---
-
----
-
-
-```
